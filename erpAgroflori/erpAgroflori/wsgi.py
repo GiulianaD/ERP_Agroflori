@@ -11,8 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-settings_module = 'erpAgroflori.deployment' if 'WEBSITE_HOSTNAME' in os.environ else 'erpAgroflori.settings'
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', settings_module)
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'erpAgroflori.settings')
 
 application = get_wsgi_application()
