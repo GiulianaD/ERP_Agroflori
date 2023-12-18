@@ -10,13 +10,15 @@
             <tr>
                 <th>Cantidad</th>
                 <th>Tipo de comida</th>
+                <th>Descripción</th>
             </tr>
         </thead>
         <tbody>
             {% for td in transaction_details %}
                 <tr>
                     <td>{{ td.quantity }}</td>
-                    <td>{{ td.food_type_id }}</td>
+                    <td>{{ td.system_type_name }}</td>
+                    <td>{{ td.system_type_description }}</td>
                 </tr>
             {% endfor %}
         </tbody>

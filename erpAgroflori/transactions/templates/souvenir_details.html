@@ -3,20 +3,22 @@
 {% load static %}
 {% block title %}Transaction Details{% endblock %}
 {% block content %}
-    <h1>DETALLES DE LA VENTA DE ENTRADAS</h1>
+    <h1>DETALLES DE LA VENTA DE SOUVENIRS</h1>
 
     <table class="table table-bordered">
         <thead>
             <tr>
                 <th>Cantidad</th>
                 <th>Tipo de souvenir</th>
+                <th>Descripción</th>
             </tr>
         </thead>
         <tbody>
             {% for td in transaction_details %}
                 <tr>
                     <td>{{ td.quantity }}</td>
-                    <td>{{ td.souvenir_type_id }}</td>
+                    <td>{{ td.system_type_name }}</td>
+                    <td>{{ td.system_type_description }}</td>
                 </tr>
             {% endfor %}
         </tbody>

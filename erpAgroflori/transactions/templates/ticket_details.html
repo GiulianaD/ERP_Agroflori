@@ -10,6 +10,7 @@
             <tr>
                 <th>Cantidad</th>
                 <th>Tipo de entrada</th>
+                <th>Descripción</th>
                 <th>Promoción</th>
                 <th>Descripción de la promoción</th>
             </tr>
@@ -18,7 +19,8 @@
             {% for td in transaction_details %}
                 <tr>
                     <td>{{ td.quantity }}</td>
-                    <td>{{ td.ticket_type_id }}</td>
+                    <td>{{ td.system_type_name }}</td>
+                    <td>{{ detail.system_type_description }}</td>
                     <td>{{ td.promotion_discount }}</td>
                     <td>{{ td.promotion_description }}</td>
                 </tr>
