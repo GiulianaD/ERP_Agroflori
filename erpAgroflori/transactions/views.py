@@ -5,7 +5,9 @@ from django.views.generic.edit import UpdateView
 from django.forms import inlineformset_factory
 from .forms import *
 from .models import *
-from django.db.models import Q
+from django.db.models import Q, Avg, Count, Sum
+import plotly.express as px
+from datetime import datetime
 
 # Create your views here.
 def make_transaction(request):
@@ -89,6 +91,112 @@ def register_food_sale(request):
         sale_form = FoodSaleForm()
         formset=FoodSaleFormSet()
     return render(request, 'food.html', {'sale_form': sale_form, 'formset': formset})
+
+def count_tickets(request):
+    current_date = datetime.now()
+    start_date = request.GET.get('datepicker1', current_date.strftime('%Y-%m-%d'))
+    end_date = request.GET.get('datepicker2', current_date.strftime('%Y-%m-%d'))
+
+    ticket_sale_ids = Transaction.objects.filter(Q(date__date__gte=start_date) & Q(date__date__lte=end_date)).values_list('id', flat=True)
+
+    system_type_dict = SystemType.objects.values('id', 'name').order_by('id')
+    system_type_dict = {item['id']: item['name'] for item in system_type_dict}
+
+    result_dict = {}
+
+    for system_type_id, system_type_name in system_type_dict.items():
+        total_quantity = 0
+
+        for ticket_id in ticket_sale_ids:
+
+            quantity_for_ticket = TicketSaleDetail.objects.filter(ticket_type=system_type_id, ticket_sale_id=ticket_id).aggregate(total_quantity=Sum('quantity'))['total_quantity']
+
+            if quantity_for_ticket is not None:
+                total_quantity += quantity_for_ticket
+
+        if total_quantity is not 0:
+            result_dict[system_type_name] = total_quantity
+
+    fig = px.pie(values=result_dict.values(), names=result_dict.keys(), title='Entradas Vedidas')
+
+    chart = fig.to_html()
+    return chart
+
+def count_food(request):
+    current_date = datetime.now()
+    start_date = request.GET.get('datepicker3', current_date.strftime('%Y-%m-%d'))
+    end_date = request.GET.get('datepicker4', current_date.strftime('%Y-%m-%d'))
+
+    sale_ids = Transaction.objects.filter(Q(date__date__gte=start_date) & Q(date__date__lte=end_date)).values_list('id', flat=True)
+
+    system_type_dict = SystemType.objects.values('id', 'name').order_by('id')
+    system_type_dict = {item['id']: item['name'] for item in system_type_dict}
+
+    result_dict = {}
+
+    for system_type_id, system_type_name in system_type_dict.items():
+        total_quantity = 0
+
+        for id in sale_ids:
+
+            quantity = FoodSaleDetail.objects.filter(food_type=system_type_id, food_sale_id=id).aggregate(total_quantity=Sum('quantity'))['total_quantity']
+
+            if quantity is not None:
+                total_quantity += quantity
+
+        if total_quantity is not 0:
+            result_dict[system_type_name] = total_quantity
+
+    fig = px.pie(values=result_dict.values(), names=result_dict.keys(), title='Comida Vedida')
+
+    chart = fig.to_html()
+    
+    return chart
+
+def count_souvenirs(request):
+    current_date = datetime.now()
+    start_date = request.GET.get('datepicker5', current_date.strftime('%Y-%m-%d'))
+    end_date = request.GET.get('datepicker6', current_date.strftime('%Y-%m-%d'))
+
+    sale_ids = Transaction.objects.filter(Q(date__date__gte=start_date) & Q(date__date__lte=end_date)).values_list('id', flat=True)
+
+    system_type_dict = SystemType.objects.values('id', 'name').order_by('id')
+    system_type_dict = {item['id']: item['name'] for item in system_type_dict}
+
+    result_dict = {}
+
+    for system_type_id, system_type_name in system_type_dict.items():
+        total_quantity = 0
+
+        for id in sale_ids:
+
+            quantity = SouvenirSaleDetail.objects.filter(souvenir_type=system_type_id, souvenir_sale_id=id).aggregate(total_quantity=Sum('quantity'))['total_quantity']
+
+            if quantity is not None:
+                total_quantity += quantity
+
+        if total_quantity is not 0:
+            result_dict[system_type_name] = total_quantity
+
+    fig = px.pie(values=result_dict.values(), names=result_dict.keys(), title='Souvenirs Vedidos')
+
+    chart = fig.to_html()
+    
+    return chart
+
+def show_graphics(request):
+    tickets_chart = count_tickets(request)
+    food_chart = count_food(request)
+    souvenirs_chart = count_souvenirs(request)
+
+    context = {
+        'ticketChart': tickets_chart,
+        'foodChart': food_chart,
+        'souvenirChart': souvenirs_chart,
+    }
+
+    return render(request, 'graphics.html', context)
+
 class TransactionListView(ListView):
     model = Transaction
     context_object_name = "transactions"

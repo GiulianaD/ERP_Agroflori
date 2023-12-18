@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Graphics{% endblock %}
+{% block content %}
+    <h1>GRÁFICAS</h1>
+
+    <form method="GET">{% csrf_token %}
+        <div class="container my-2">
+            <div class="d-flex justify-content-between">
+                <label>Desde:     <input type="date" id="datepicker1" name="datepicker1" min="2023-01-01" value="{{datepicker1}}"></label>
+                <label> Hasta:    <input type="date" id="datepicker2" name="datepicker2" min="2023-01-01" value="{{datepicker2}}"></label>
+                <input id="find" class="btn btn-outline-success rounded-pill px-4 py-2 my-2 my-sm-0" type="submit" value="Buscar">
+            </div>
+        </div>
+        <div>
+            {{ ticketChart|safe }}
+        </div>
+    </form>
+
+    <form method="GET">{% csrf_token %}
+        <div class="container my-2">
+            <div class="d-flex justify-content-between">
+                <label>Desde:     <input type="date" id="datepicker3" name="datepicker3" min="2023-01-01" value="{{datepicker3}}"></label>
+                <label> Hasta:    <input type="date" id="datepicker4" name="datepicker4" min="2023-01-01" value="{{datepicker4}}"></label>
+                <input id="find" class="btn btn-outline-success rounded-pill px-4 py-2 my-2 my-sm-0" type="submit" value="Buscar">
+            </div>
+        </div>
+        <div>
+            {{ foodChart|safe }}
+        </div>
+       
+    </form>
+
+    <form method="GET">{% csrf_token %}
+        <div class="container my-2">
+            <div class="d-flex justify-content-between">
+                <label>Desde:     <input type="date" id="datepicker5" name="datepicker5" min="2023-01-01" value="{{datepicker5}}"></label>
+                <label> Hasta:    <input type="date" id="datepicker6" name="datepicker6" min="2023-01-01" value="{{datepicker6}}"></label>
+                <input id="find" class="btn btn-outline-success rounded-pill px-4 py-2 my-2 my-sm-0" type="submit" value="Buscar">
+            </div>
+        </div>
+        <div>
+            {{ souvenirChart|safe }}
+        </div>
+        
+    </form>
+
+{% endblock %}
