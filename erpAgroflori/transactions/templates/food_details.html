@@ -1,0 +1,25 @@
+{%extends 'base.html'%}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}Transaction Details{% endblock %}
+{% block content %}
+    <h1>DETALLES DE LA VENTA DE COMIDA</h1>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Cantidad</th>
+                <th>Tipo de comida</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for td in transaction_details %}
+                <tr>
+                    <td>{{ td.quantity }}</td>
+                    <td>{{ td.food_type_id }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a class="custom-btn btn-outline-success rounded-pill px-4 py-2 my-2 my-sm-0" href="{% url 'search-transactions' %}">Volver atrás</a>
+{% endblock %}

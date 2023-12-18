@@ -39,6 +39,7 @@
                     <td>{{ transaction.description }}</td>
                     <td>  
                         <a class="btn btn-outline-success rounded-pill px-4 py-2 my-2 my-sm-0" href="{% url 'update-transaction' transaction.id %}">Editar</a>
+                        <a class="btn btn-outline-success rounded-pill px-4 py-2 my-2 my-sm-0" href="{% url 'get-transaction-details' transaction.id %}">Ver Detalles</a>
                     </td>
                 </tr>
             {% endfor %}

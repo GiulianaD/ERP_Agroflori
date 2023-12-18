@@ -8,4 +8,5 @@ urlpatterns = [
     path('food', views.register_food_sale, name="register-food-sale"),
     path('search-transaction/', views.TransactionListView.as_view(), name="search-transactions"),
     path('update-transaction/<int:pk>', views.TransactionUpdateView.as_view(), name="update-transaction"),
+    path('get-transaction-details/<int:pk>', views.get_transaction_details, name="get-transaction-details"),
     ]
