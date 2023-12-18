@@ -2,7 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=django,visualstudiocode
 
 ### Django ###
-#.env
+.env
 *.log
 *.pot
 *.pyc
@@ -133,7 +133,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-#.env
+.env
 .venv
 env/
 venv/
