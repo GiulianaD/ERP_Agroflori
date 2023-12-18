@@ -1,0 +1,7 @@
+24.144.89.34
+
+
+Usuario: root
+Contraseña: QueryQr3w
+
+bash mvnw spring-boot:run
