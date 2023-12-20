@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
+from django.http import Http404
 from django.urls import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.edit import UpdateView
+from django.views.generic.detail import DetailView
 from django.forms import inlineformset_factory
 from .forms import *
 from .models import *
@@ -223,3 +225,75 @@ class TransactionUpdateView(UpdateView):
     fields = '__all__'
     template_name = "transaction_update_form.html"
     success_url = reverse_lazy("search-transactions")
+       
+
+def get_transaction_details(request, pk):
+    try:
+        ticket_sale_detail = TicketSaleDetail.objects.filter(ticket_sale_id=pk)
+        if ticket_sale_detail.exists():
+            ticket_details = []
+            for detail in ticket_sale_detail:
+                system_type = detail.ticket_type
+                ticket_details.append({
+                    'quantity': detail.quantity,
+                    'system_type_name': system_type.name,
+                    'system_type_description': system_type.description
+                })
+            return render(request, 'ticket_details.html', {'transaction_details': ticket_details})
+    except TicketSaleDetail.DoesNotExist:
+        pass
+
+    try:
+        food_sale_detail = FoodSaleDetail.objects.filter(food_sale_id=pk)
+        if food_sale_detail.exists():
+            food_details = []
+            for detail in food_sale_detail:
+                system_type = detail.food_type
+                food_details.append({
+                    'quantity': detail.quantity,
+                    'system_type_name': system_type.name,
+                    'system_type_description': system_type.description
+                })
+            return render(request, 'food_details.html', {'transaction_details': food_details})
+    except FoodSaleDetail.DoesNotExist:
+        pass
+
+    try:
+        souvenir_sale_detail = SouvenirSaleDetail.objects.filter(souvenir_sale_id=pk)
+        if souvenir_sale_detail.exists():
+            souvenir_details = []
+            for detail in souvenir_sale_detail:
+                system_type = detail.souvenir_type
+                souvenir_details.append({
+                    'quantity': detail.quantity,
+                    'system_type_name': system_type.name,
+                    'system_type_description': system_type.description
+                })
+            return render(request, 'souvenir_details.html', {'transaction_details': souvenir_details})
+    except SouvenirSaleDetail.DoesNotExist:
+        pass
+
+    return redirect('search-transactions')
+
+'''def get_transaction_details(request, pk):
+    try:
+        ticket_sale_detail = TicketSaleDetail.objects.filter(ticket_sale_id=pk)
+        if ticket_sale_detail.exists():
+            return render(request, 'ticket_details.html', {'transaction_details': ticket_sale_detail})
+    except TicketSaleDetail.DoesNotExist:
+        pass
+
+    try:
+        food_sale_detail = FoodSaleDetail.objects.filter(food_sale_id=pk)
+        if food_sale_detail.exists():
+            return render(request, 'food_details.html', {'transaction_details': food_sale_detail})
+    except FoodSaleDetail.DoesNotExist:
+        pass
+
+    try:
+        souvenir_sale_detail = SouvenirSaleDetail.objects.filter(souvenir_sale_id=pk)
+        if souvenir_sale_detail.exists():
+             return render(request, 'souvenir_details.html', {'transaction_details': souvenir_sale_detail})
+    except SouvenirSaleDetail.DoesNotExist:
+        pass
+    return redirect('search-transactions')'''

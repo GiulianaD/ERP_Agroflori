@@ -1,0 +1,31 @@
+{%extends 'base.html'%}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}Transaction Details{% endblock %}
+{% block content %}
+    <h1>DETALLES DE LA VENTA DE ENTRADAS</h1>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Cantidad</th>
+                <th>Tipo de entrada</th>
+                <th>Descripción</th>
+                <th>Promoción</th>
+                <th>Descripción de la promoción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for td in transaction_details %}
+                <tr>
+                    <td>{{ td.quantity }}</td>
+                    <td>{{ td.system_type_name }}</td>
+                    <td>{{ td.system_type_description }}</td>
+                    <td>{{ td.promotion_discount }}</td>
+                    <td>{{ td.promotion_description }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a class="custom-btn btn-outline-success rounded-pill px-4 py-2 my-2 my-sm-0" href="{% url 'search-transactions' %}">Volver atrás</a>
+{% endblock %}
