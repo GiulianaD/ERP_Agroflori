@@ -100,7 +100,7 @@ class TicketSaleDetailForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(TicketSaleDetailForm, self).__init__(*args, **kwargs)
 
-        category_type = 'Ticket'
+        category_type = 'ticket'
         ticket_types = SystemTypeCategory.objects.filter(name=category_type)
         
         if ticket_types:
@@ -202,7 +202,7 @@ class FoodSaleDetailForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(FoodSaleDetailForm, self).__init__(*args, **kwargs)
 
-        category_type = 'Comida'
+        category_type = 'food'
         food_types = SystemTypeCategory.objects.filter(name=category_type)
 
         if food_types:

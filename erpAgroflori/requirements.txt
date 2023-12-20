@@ -6,3 +6,4 @@ django-phonenumber-field[phonenumbers]
 psycopg2
 crispy_bootstrap4
 django-allauth
+plotly

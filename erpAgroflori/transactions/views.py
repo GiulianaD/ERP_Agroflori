@@ -147,6 +147,7 @@ def count_food(request):
         if total_quantity is not 0:
             result_dict[system_type_name] = total_quantity
 
+    print(result_dict)
     fig = px.pie(values=result_dict.values(), names=result_dict.keys(), title='Comida Vedida')
 
     chart = fig.to_html()
