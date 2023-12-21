@@ -9,7 +9,7 @@ from .forms import *
 from .models import *
 from django.db.models import Q, Avg, Count, Sum
 import plotly.express as px
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # Create your views here.
 def make_transaction(request):
@@ -116,10 +116,10 @@ def count_tickets(request):
             if quantity_for_ticket is not None:
                 total_quantity += quantity_for_ticket
 
-        if total_quantity is not 0:
+        if total_quantity != 0:
             result_dict[system_type_name] = total_quantity
 
-    fig = px.pie(values=result_dict.values(), names=result_dict.keys(), title='Entradas Vedidas')
+    fig = px.pie(values=result_dict.values(), names=result_dict.keys(), title='Entradas Vendidas')
 
     chart = fig.to_html()
     return chart
@@ -146,11 +146,11 @@ def count_food(request):
             if quantity is not None:
                 total_quantity += quantity
 
-        if total_quantity is not 0:
+        if total_quantity != 0:
             result_dict[system_type_name] = total_quantity
 
     print(result_dict)
-    fig = px.pie(values=result_dict.values(), names=result_dict.keys(), title='Comida Vedida')
+    fig = px.pie(values=result_dict.values(), names=result_dict.keys(), title='Comida Vendida')
 
     chart = fig.to_html()
     
@@ -178,10 +178,10 @@ def count_souvenirs(request):
             if quantity is not None:
                 total_quantity += quantity
 
-        if total_quantity is not 0:
+        if total_quantity != 0:
             result_dict[system_type_name] = total_quantity
 
-    fig = px.pie(values=result_dict.values(), names=result_dict.keys(), title='Souvenirs Vedidos')
+    fig = px.pie(values=result_dict.values(), names=result_dict.keys(), title='Souvenirs Vendidos')
 
     chart = fig.to_html()
     
@@ -200,6 +200,9 @@ def show_graphics(request):
 
     return render(request, 'graphics.html', context)
 
+def view_profile(request):
+    return render(request, 'profile.html')
+
 class TransactionListView(ListView):
     model = Transaction
     context_object_name = "transactions"
@@ -210,14 +213,27 @@ class TransactionListView(ListView):
         queryset = Transaction.objects.all()  # Initial queryset
         if (self.request.GET.get('datepicker1') is not None):
             start_date = self.request.GET.get('datepicker1')
-            end_date = self.request.GET.get('datepicker2')
-            queryset = Transaction.objects.filter(Q(date__gte=start_date) & Q(date__lte=end_date))
+   
+            # Obtener 'end_date' como string desde la request
+            end_date_str = self.request.GET.get('datepicker2')
+
+            # Convertir 'end_date_str' a un objeto datetime
+            end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+
+            # Sumar un día a 'end_date'
+            end_date += timedelta(days=1)
+
+            # Convertir 'end_date' de nuevo a string
+            end_date_str_updated = end_date.strftime('%Y-%m-%d')
+
+            queryset = Transaction.objects.filter(Q(date__gte=start_date) & Q(date__lte=end_date_str_updated))
         return queryset
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['datepicker1'] = self.request.GET.get('datepicker1', '')
         context['datepicker2'] = self.request.GET.get('datepicker2', '')
+
         return context
     
 class TransactionUpdateView(UpdateView):
