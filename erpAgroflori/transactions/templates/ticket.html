@@ -1,0 +1,41 @@
+{%extends 'base.html'%}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}Ticket sale{% endblock %}
+{% block content %}
+    <h1>REGISTRAR VENTA DE ENTRADAS</h1>
+    <form method="POST" class="form-group">
+        {% csrf_token %}
+        {{ sale_form | crispy }}
+        {% if sale_form.errors %}
+            <div class="alert alert-danger">
+                {{ sale_form.errors }}
+            </div>
+        {% endif %}
+
+        {{ formset.management_form }}
+        {% for form in formset %}
+        <div>
+            {{ form.as_table}}
+            <label>Monto:<input id="{{ form.prefix }}-amount" type="text" class="amount-input-class" value='0' readonly></label>
+            <hr>
+        </div>
+        {% endfor %}
+
+        {% if formset.errors %}
+            {% for form in formset %}
+                <div class="alert alert-danger">
+                {{ form.errors }}
+                </div>
+                {% endfor %}
+        {% endif %}
+        
+        {% for error in formset.non_form_errors %}
+            <span style="color: red">{{ error }}</span>
+        {% endfor %}
+        <button type="submit" class="btn btn-outline-success rounded-pill px-4 py-2 my-2 my-sm-0">Guardar</button>
+    </form>
+        
+    
+    <script src="{% static 'tickets.js' %}"></script>
+{% endblock %}

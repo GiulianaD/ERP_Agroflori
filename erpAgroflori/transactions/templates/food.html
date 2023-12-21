@@ -1,0 +1,40 @@
+{%extends 'base.html'%}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}Souvenir sale{% endblock %}
+{% block content %}
+    <h1>REGISTRAR VENTA DE COMIDA</h1>
+    <form method="POST" class="form-group">
+        {% csrf_token %}
+        {{ sale_form | crispy }}
+        {%  if sale_form.errors %}
+            <div class="alert alert-danger">
+                {{ sale_form.errors }}
+            </div>
+        {% endif %}
+
+        {{ formset.management_form }}
+        {% for form in formset %}
+            {{ form }}
+            <label>Monto:<input id="{{ form.prefix }}-amount" type="text" class="amount-input-class" value='0'></label>
+            <hr>
+        {% endfor %}
+
+        {% if formset.errors %}
+            {% for form in formset %}
+                <div class="alert alert-danger">
+                {{ form.errors }}
+                </div>
+                {% endfor %}
+        {% endif %}
+        
+        {% for error in formset.non_form_errors %}
+            <p>f</p>
+            <span style="color: red">{{ error }}</span>
+        {% endfor %}
+        <button type="submit" class="btn btn-success">Guardar</button>
+    </form>
+        
+    
+    <script src="{% static 'food.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,65 @@
+{%extends 'base.html'%}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}Transaction Search/{% endblock %}
+{% block content %}
+    <h1>BÚSQUEDA DE TRANSACCIONES</h1>
+    <form method="GET">{% csrf_token %}
+        <div class="container my-2">
+            <div class="d-flex justify-content-between">
+                <label>Desde:     <input type="date" id="datepicker1" name="datepicker1" min="2023-01-01" value="{{datepicker1}}"></label>
+                <label> Hasta:    <input type="date" id="datepicker2" name="datepicker2" min="2023-01-01" value="{{datepicker2}}"></label>
+                <input id="find" class="btn btn-outline-success rounded-pill px-4 py-2 my-2 my-sm-0" type="submit" value="Buscar">
+            </div>
+        </div>
+    </form>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Método de Pago</th>
+                <th>Categoría</th>
+                <th>Moneda</th>
+                <th>Monto</th>
+                <th>Usuario</th>
+                <th>Descripción</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.date }}</td>
+                    <td>{{ transaction.method_of_payment }}</td>
+                    <td>{{ transaction.category }}</td>
+                    <td>{{ transaction.currency }}</td>
+                    <td>{{ transaction.amount }}</td>
+                    <td>{{ transaction.user.username }}</td>
+                    <td>{{ transaction.description }}</td>
+                    <td>  
+                        <a class="btn btn-outline-success rounded-pill px-4 py-2 my-2 my-sm-0" href="{% url 'update-transaction' transaction.id %}">Editar</a>
+                        <a class="btn btn-outline-success rounded-pill px-4 py-2 my-2 my-sm-0" href="{% url 'get-transaction-details' transaction.id %}">Ver Detalles</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if is_paginated %}
+    <div class="pagination">
+        <span class="page-links">
+            {% if page_obj.has_previous %}
+                <a href="/search-transaction?page={{ page_obj.previous_page_number }}">Anterior</a>
+            {% endif %}
+            <span class="page-current">
+                Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+            </span>
+            {% if page_obj.has_next %}
+                <a href="/search-transaction?page={{ page_obj.next_page_number }}">Siguiente</a>
+            {% endif %}
+        </span>
+    </div>
+{% endif %}
+    <script src="{% static 'transactions.js' %}"></script>
+{% endblock %}

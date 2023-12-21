@@ -32,6 +32,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+ 
 
 # Application definition
 
@@ -45,6 +46,13 @@ INSTALLED_APPS = [
     'users',
     'phonenumber_field',
     'transactions',
+    'registration',
+    'crispy_forms',
+    'crispy_bootstrap4',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [
@@ -55,6 +63,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'erpAgroflori.urls'
@@ -70,6 +79,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
         },
     },
@@ -77,6 +87,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'erpAgroflori.wsgi.application'
 
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': {
+            "profile",
+            "email"
+        },
+        'APP': {
+            'client_id': '485251494492-j16dgfq9qaa9b778kom0g712gkm72hns.apps.googleusercontent.com',
+            'secret': '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',
+            'key': ''
+        },
+        'EMAIL_AUTHENTICATION': True,
+        'SOCIALACCOUNT_AUTO_SIGNUP': False,
+    }
+} 
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -89,7 +114,6 @@ DATABASES = {
         'PASSWORD': env('DB_PASSWORD'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -133,3 +157,19 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "users.User"
+
+CRISPY_TEMPLATE_PACK = "bootstrap4"
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
+
+]
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+SOCIALACCOUNT_ADAPTER = 'registration.adapters.CustomSocialAccountAdapter'
+SOCIALACCOUNT_LOGIN_ON_GET=True

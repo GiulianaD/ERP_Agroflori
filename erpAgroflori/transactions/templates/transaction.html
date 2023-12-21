@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Transactions{% endblock %}
+{% block content %}
+    <h1>REGISTRAR TRANSACCIÓN</h1>
+    <form method="POST" class="form-group">
+        {% csrf_token %}
+        {% crispy form%}
+        
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                {{ form.errors }}
+            </div>
+        {% endif %}
+    </form>
+{% endblock %}
