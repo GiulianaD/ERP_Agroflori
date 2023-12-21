@@ -42,15 +42,12 @@ class TransactionForm(ModelForm):
             ),
         )
         
-        #self.helper.add_input(Submit('submit', 'Guardar'))
-        #self.helper.add_input(Reset('Reset This Form', 'Borrar'))
-
     def clean(self):
         cleaned_data = super().clean()
         cleaned_data['user'] = self.user_user
 
         if cleaned_data['category'] == 'EX':
-            cleaned_data['category'] = - cleaned_data['category']
+            cleaned_data['amount'] = cleaned_data['amount']
         return cleaned_data
     
     def save(self, commit=True):

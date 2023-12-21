@@ -37,7 +37,7 @@ def complete_registration(request, username=None):
             if form.is_valid():
                 form.save(commit=True)
                 messages.success(request, 'Gracias {} por terminar de registrarte. .'.format(username))
-                login(request, user)
+                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
                 return redirect('home')
             print(form.errors)    
             return render(request, "complete_registration.html", {'form':form})
