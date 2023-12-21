@@ -198,6 +198,9 @@ def show_graphics(request):
 
     return render(request, 'graphics.html', context)
 
+def view_profile(request):
+    return render(request, 'profile.html')
+
 class TransactionListView(ListView):
     model = Transaction
     context_object_name = "transactions"

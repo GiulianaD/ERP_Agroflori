@@ -1,4 +1,5 @@
 from collections.abc import Mapping
+import html
 from typing import Any
 from django import forms
 from django.core.files.base import File
@@ -35,11 +36,14 @@ class TransactionForm(ModelForm):
                 Field('category', css_class='col-md-6'),
                 Field('description', css_class='col-md-6'),
                 Field('amount', css_class='col-md-6'),
+                Submit('submit', 'Guardar', css_class="btn_submit btn-outline-success rounded-pill px-4 py-2 my-2 my-sm-0"),
+                Reset('Reset This Form', 'Borrar', css_class="btn btn-outline-success rounded-pill px-4 py-2 my-2 my-sm-0"),
                 style="display: grid; grid-template-columns: repeat(2, 1fr);gap: 16px;"
             ),
         )
-        self.helper.add_input(Submit('submit', 'Guardar'))
-        self.helper.add_input(Reset('Reset This Form', 'Borrar'))
+        
+        #self.helper.add_input(Submit('submit', 'Guardar'))
+        #self.helper.add_input(Reset('Reset This Form', 'Borrar'))
 
     def clean(self):
         cleaned_data = super().clean()
@@ -122,7 +126,7 @@ class TicketSaleDetailForm(ModelForm):
     
     class Meta:
         model = TicketSaleDetail
-        fields = ['ticket_type', 'promotion_discount', 'promotion_description' ,'ticket_sale', 'quantity'] 
+        fields = ['ticket_type', 'quantity', 'promotion_discount', 'promotion_description' ,'ticket_sale'] 
     
 class SouvenirSaleForm(ModelForm):
     amount = forms.IntegerField(widget=forms.NumberInput(attrs={'id': 'amount-input-id', 'readonly': 'readonly'}))
