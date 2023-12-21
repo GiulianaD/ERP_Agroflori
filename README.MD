@@ -18,6 +18,6 @@ Este proyecto se ejecuta de manera local.
 
 ## Créditos
 
-- [@giulianad](https://github.com/giulianad)
+- [@giulianad](https://github.com/GiulianaD)
 - [@lauradelgadillo](https://github.com/lauradelgadillo)
 - [@selwav](https://github.com/selwav)
